@@ -8,7 +8,7 @@
 
 #import "SpaceImageViewController.h"
 
-@interface SpaceImageViewController ()
+@interface SpaceImageViewController () <UIScrollViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
@@ -23,12 +23,20 @@
     self.imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Earth.jpg"]];
     self.scrollView.contentSize = self.imageView.frame.size;
     [self.scrollView addSubview:self.imageView];
+    self.scrollView.delegate = self;
+    self.scrollView.maximumZoomScale = 2.0;
+    self.scrollView.minimumZoomScale = self.view.frame.size.width/self.imageView.frame.size.width;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return self.imageView;
+}
+
 
 /*
 #pragma mark - Navigation
