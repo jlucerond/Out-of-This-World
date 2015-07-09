@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D86498AA1B4F165500534507 /* SpaceDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D86498A91B4F165500534507 /* SpaceDataViewController.m */; };
 		D8EBFF071B4D6E9E000CFD34 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D8EBFF061B4D6E9E000CFD34 /* main.m */; };
 		D8EBFF0A1B4D6E9E000CFD34 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D8EBFF091B4D6E9E000CFD34 /* AppDelegate.m */; };
 		D8EBFF101B4D6E9E000CFD34 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8EBFF0E1B4D6E9E000CFD34 /* Main.storyboard */; };
@@ -30,6 +31,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D86498A81B4F165500534507 /* SpaceDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpaceDataViewController.h; sourceTree = "<group>"; };
+		D86498A91B4F165500534507 /* SpaceDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpaceDataViewController.m; sourceTree = "<group>"; };
 		D8EBFF011B4D6E9E000CFD34 /* Out of This World.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Out of This World.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EBFF051B4D6E9E000CFD34 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8EBFF061B4D6E9E000CFD34 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -146,6 +149,8 @@
 				D8EBFF2B1B4D6F1B000CFD34 /* OuterSpaceTableViewController.m */,
 				D8EBFF7F1B4EC23C000CFD34 /* SpaceImageViewController.h */,
 				D8EBFF801B4EC23C000CFD34 /* SpaceImageViewController.m */,
+				D86498A81B4F165500534507 /* SpaceDataViewController.h */,
+				D86498A91B4F165500534507 /* SpaceDataViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -256,6 +261,7 @@
 				D8EBFF2F1B4D8193000CFD34 /* AstronomicalData.m in Sources */,
 				D8EBFF341B4D9EA4000CFD34 /* SpaceObject.m in Sources */,
 				D8EBFF811B4EC23C000CFD34 /* SpaceImageViewController.m in Sources */,
+				D86498AA1B4F165500534507 /* SpaceDataViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,6 +390,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Out of This World/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -394,6 +401,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Out of This World/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -412,6 +420,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Out of This WorldTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Out of This World.app/Out of This World";
@@ -427,6 +436,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Out of This WorldTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Out of This World.app/Out of This World";
@@ -452,6 +462,7 @@
 				D8EBFF261B4D6E9E000CFD34 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D8EBFF271B4D6E9E000CFD34 /* Build configuration list for PBXNativeTarget "Out of This WorldTests" */ = {
 			isa = XCConfigurationList;
@@ -460,6 +471,7 @@
 				D8EBFF291B4D6E9E000CFD34 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

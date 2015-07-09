@@ -1,5 +1,5 @@
 //
-//  SpaceImageViewController.h
+//  SpaceDataViewController.h
 //  Out of This World
 //
 //  Created by Joe Lucero on 7/9/15.
@@ -9,9 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "SpaceObject.h"
 
-@interface SpaceImageViewController : UIViewController
+@interface SpaceDataViewController : UIViewController
 
-@property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) SpaceObject *spaceObject;
 
 @end

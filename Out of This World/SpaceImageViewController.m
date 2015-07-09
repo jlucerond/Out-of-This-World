@@ -20,7 +20,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    self.imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Earth.jpg"]];
+    UIImage *myImage = self.spaceObject.spaceImage;
+    self.imageView = [[UIImageView alloc] initWithImage:myImage];
     self.scrollView.contentSize = self.imageView.frame.size;
     [self.scrollView addSubview:self.imageView];
     self.scrollView.delegate = self;

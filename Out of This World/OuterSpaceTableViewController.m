@@ -9,6 +9,8 @@
 #import "OuterSpaceTableViewController.h"
 #import "AstronomicalData.h"
 #import "SpaceObject.h"
+#import "SpaceImageViewController.h"
+#import "SpaceDataViewController.h"
 
 @interface OuterSpaceTableViewController ()
 
@@ -72,6 +74,31 @@
     return cell;
 }
 
+#pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+
+    if ([sender isKindOfClass:[UITableViewCell class]] && [segue.destinationViewController isKindOfClass:[SpaceImageViewController class]]){
+        NSIndexPath *path = [self.tableView indexPathForCell:sender];
+        SpaceObject *spaceObjectForNextVC = self.planets[path.row];
+        SpaceImageViewController *nextVC = segue.destinationViewController;
+        nextVC.spaceObject = spaceObjectForNextVC;
+    }
+    
+    else if ([segue.identifier isEqualToString:@"push to space data"]){
+        NSIndexPath *path = sender;
+        SpaceObject *spaceObjectForNextVC = self.planets[path.row];
+        SpaceDataViewController *nextVC = segue.destinationViewController;
+        nextVC.spaceObject = spaceObjectForNextVC;
+    }
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    [self performSegueWithIdentifier:@"push to space data" sender:indexPath];
+}
 
 /*
 // Override to support conditional editing of the table view.
@@ -107,14 +134,6 @@
 }
 */
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
