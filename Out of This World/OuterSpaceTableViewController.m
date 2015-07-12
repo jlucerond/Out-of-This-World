@@ -53,24 +53,38 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
+    
+    if (self.addedSpaceObjects.count){
+        return 2;
+    }
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
+    
+    if (section == 1) {
+        return self.addedSpaceObjects.count;
+    }
     return self.planets.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"joesCell" forIndexPath:indexPath];
+    cell.backgroundColor = [UIColor clearColor];
+    cell.textLabel.textColor = [UIColor whiteColor];
+    cell.detailTextLabel.textColor = [UIColor redColor];
+    
+    if (indexPath.section == 1) {
+        //use new space object to customize our cell
+    }
+
     SpaceObject *planet = self.planets[indexPath.row];
     cell.textLabel.text = planet.name;
     cell.detailTextLabel.text = planet.nickname;
     cell.imageView.image = planet.spaceImage;
-    cell.backgroundColor = [UIColor clearColor];
-    cell.textLabel.textColor = [UIColor whiteColor];
-    cell.detailTextLabel.textColor = [UIColor redColor];
+    
     return cell;
 }
 
