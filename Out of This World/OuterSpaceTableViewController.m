@@ -18,30 +18,32 @@
 
 @implementation OuterSpaceTableViewController
 
+#define ADDED_SPACE_OBJECTS_KEY @"Added Space Objects Array"
+
+#pragma mark - Lazy Instantiation
+
+- (NSMutableArray *)planets {
+    if (!_planets){
+        _planets = [[NSMutableArray alloc] init];
+    }
+    return _planets;
+}
+
+- (NSMutableArray *) addedSpaceObjects {
+    if (!_addedSpaceObjects) {
+        _addedSpaceObjects = [[NSMutableArray alloc] init];
+    }
+    return _addedSpaceObjects;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    self.planets = [[NSMutableArray alloc] init];
-    
     for (NSMutableDictionary *planetData in [AstronomicalData allKnownPlanets]){
         NSString *planetName = [planetData objectForKey:PLANET_NAME];
-        SpaceObject *newSpaceObject = [[SpaceObject alloc] initWithData:planetData andImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@.jpg", planetName]]];
+        SpaceObject *newSpaceObject = [[SpaceObject alloc] initWithData:planetData andImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@", planetName]]];
         [self.planets addObject:newSpaceObject];
     }
-    
-//    NSMutableDictionary *myDictionary = [[NSMutableDictionary alloc] init];
-//    NSString *firstColor = @"red";
-//    [myDictionary setObject:firstColor forKey:@"firetruck color"];
-//    [myDictionary setObject:@"blue" forKey:@"ocean color"];
-//    [myDictionary setObject:@"yellow" forKey:@"star color"];
-//    NSLog(@"%@", myDictionary);
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -78,12 +80,23 @@
     
     if (indexPath.section == 1) {
         //use new space object to customize our cell
+        SpaceObject *spaceObject = self.addedSpaceObjects[indexPath.row];
+        cell.textLabel.text = [spaceObject.name capitalizedString];
+        cell.detailTextLabel.text = [spaceObject.nickname capitalizedString];
+        if (!spaceObject.spaceImage){
+            cell.imageView.image = [UIImage imageNamed:@"EinsteinRing"];
+        }
+        else {
+            cell.imageView.image = spaceObject.spaceImage;
+        }
     }
-
-    SpaceObject *planet = self.planets[indexPath.row];
-    cell.textLabel.text = planet.name;
-    cell.detailTextLabel.text = planet.nickname;
-    cell.imageView.image = planet.spaceImage;
+    
+    else {
+        SpaceObject *planet = self.planets[indexPath.row];
+        cell.textLabel.text = planet.name;
+        cell.detailTextLabel.text = planet.nickname;
+        cell.imageView.image = planet.spaceImage;
+    }
     
     return cell;
 }
@@ -93,18 +106,42 @@
  // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
+    //for looking at space pictures
     if ([sender isKindOfClass:[UITableViewCell class]] && [segue.destinationViewController isKindOfClass:[SpaceImageViewController class]]){
         NSIndexPath *path = [self.tableView indexPathForCell:sender];
-        SpaceObject *spaceObjectForNextVC = self.planets[path.row];
+        SpaceObject *spaceObjectForNextVC;
+        
+        if (path.section == 0){
+            spaceObjectForNextVC = self.planets[path.row];
+        }
+        else if (path.section == 1){
+            spaceObjectForNextVC = self.addedSpaceObjects[path.row];
+        }
+        
         SpaceImageViewController *nextVC = segue.destinationViewController;
         nextVC.spaceObject = spaceObjectForNextVC;
     }
     
+    //for learning about space data
     else if ([segue.identifier isEqualToString:@"push to space data"]){
         NSIndexPath *path = sender;
-        SpaceObject *spaceObjectForNextVC = self.planets[path.row];
+        SpaceObject *spaceObjectForNextVC;
+        
+        if (path.section == 0){
+            spaceObjectForNextVC = self.planets[path.row];
+        }
+        else if (path.section == 1){
+            spaceObjectForNextVC = self.addedSpaceObjects[path.row];
+        }
+        
         SpaceDataViewController *nextVC = segue.destinationViewController;
         nextVC.spaceObject = spaceObjectForNextVC;
+    }
+    
+    //for adding new space objects
+    else if ([segue.destinationViewController isKindOfClass:[AddSpaceObjectViewController class]]){
+        AddSpaceObjectViewController *nextVC = segue.destinationViewController;
+        nextVC.delegate = self;
     }
 }
 
@@ -113,6 +150,44 @@
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     [self performSegueWithIdentifier:@"push to space data" sender:indexPath];
 }
+
+#pragma mark - AddSpaceObjectViewControllerDelegate
+
+- (void)addSpaceObject:(SpaceObject *)spaceObject {
+
+    [self.addedSpaceObjects addObject:spaceObject];
+    
+    // will save to NSUSerDefaults here
+    NSMutableArray *spaceObjectsAsPropertyLists = [[[NSUserDefaults standardUserDefaults] arrayForKey:ADDED_SPACE_OBJECTS_KEY] mutableCopy];
+    if (!spaceObjectsAsPropertyLists) spaceObjectsAsPropertyLists = [[NSMutableArray alloc] init];
+    
+    [spaceObjectsAsPropertyLists addObject:[self spaceObjectAsAPropertyList:spaceObject]];
+    [[NSUserDefaults standardUserDefaults] setObject:spaceObjectsAsPropertyLists forKey:ADDED_SPACE_OBJECTS_KEY];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    // call this helper method to change space object to a property list
+    
+    [self.tableView reloadData];
+    [self dismissViewControllerAnimated:true completion:nil];
+}
+
+#pragma mark - Helper Methods
+
+- (NSDictionary *) spaceObjectAsAPropertyList: (SpaceObject *) spaceObject {
+    NSData *imageData = UIImagePNGRepresentation(spaceObject.spaceImage);
+    NSDictionary *dictionary = @{PLANET_NAME : spaceObject.name,
+                                 PLANET_NICKNAME : spaceObject.nickname,
+                                 PLANET_DAY_LENGTH : @(spaceObject.dayLength),
+                                 PLANET_DIAMETER : @(spaceObject.diameter),
+                                 PLANET_GRAVITY : @(spaceObject.gravitationalForce),
+                                 PLANET_IMAGE : imageData,
+                                 PLANET_INTERESTING_FACT : spaceObject.interestingFact,
+                                 PLANET_NUMBER_OF_MOONS : @(spaceObject.numberOfMoons),
+                                 PLANET_YEAR_LENGTH : @(spaceObject.yearLength)};
+    
+    return dictionary;
+}
+
 
 /*
 // Override to support conditional editing of the table view.

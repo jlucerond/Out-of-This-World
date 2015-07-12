@@ -21,6 +21,11 @@
     // Do any additional setup after loading the view.
 
     UIImage *myImage = self.spaceObject.spaceImage;
+    
+    if (!self.spaceObject.spaceImage){
+        myImage = [UIImage imageNamed:@"EinsteinRing"];
+    }
+
     self.imageView = [[UIImageView alloc] initWithImage:myImage];
     self.scrollView.contentSize = self.imageView.frame.size;
     [self.scrollView addSubview:self.imageView];

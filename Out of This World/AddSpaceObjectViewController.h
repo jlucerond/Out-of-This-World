@@ -7,8 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SpaceObject.h"
+
+@protocol AddSpaceObjectViewControllerDelegate <NSObject>
+
+@required
+
+- (void) addSpaceObject : (SpaceObject *) spaceObject;
+
+@end
 
 @interface AddSpaceObjectViewController : UIViewController
+
+@property (weak, nonatomic) id <AddSpaceObjectViewControllerDelegate> delegate;
+
 @property (strong, nonatomic) IBOutlet UITextField *nameTF;
 @property (strong, nonatomic) IBOutlet UITextField *nicknameTF;
 @property (strong, nonatomic) IBOutlet UITextField *diameterTF;
