@@ -44,6 +44,12 @@
         SpaceObject *newSpaceObject = [[SpaceObject alloc] initWithData:planetData andImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@", planetName]]];
         [self.planets addObject:newSpaceObject];
     }
+    
+    NSArray *myPlanetsAsPropertyLists = [[NSUserDefaults standardUserDefaults] arrayForKey:ADDED_SPACE_OBJECTS_KEY];
+    for (NSDictionary *dictionary in myPlanetsAsPropertyLists) {
+        SpaceObject *spaceObject = [self spaceObjectForDictionary:dictionary];
+        [self.addedSpaceObjects addObject:spaceObject];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -174,7 +180,18 @@
 #pragma mark - Helper Methods
 
 - (NSDictionary *) spaceObjectAsAPropertyList: (SpaceObject *) spaceObject {
-    NSData *imageData = UIImagePNGRepresentation(spaceObject.spaceImage);
+    NSData *imageData;
+    
+    if (!spaceObject.spaceImage) {
+        NSLog(@"no space image");
+        imageData = UIImagePNGRepresentation([UIImage imageNamed:@"Earth"]);
+    }
+    
+    else {
+        imageData = UIImagePNGRepresentation(spaceObject.spaceImage);
+    }
+    
+
     NSDictionary *dictionary = @{PLANET_NAME : spaceObject.name,
                                  PLANET_NICKNAME : spaceObject.nickname,
                                  PLANET_DAY_LENGTH : @(spaceObject.dayLength),
@@ -188,26 +205,41 @@
     return dictionary;
 }
 
+- (SpaceObject *) spaceObjectForDictionary : (NSDictionary *) dictionary {
+    NSData *dataForImage = [dictionary objectForKey:PLANET_IMAGE];
+    SpaceObject *spaceObject = [[SpaceObject alloc] initWithData:dictionary andImage:[UIImage imageWithData:dataForImage]];
+    return spaceObject;
+}
 
-/*
+
+# pragma mark - Editing of Rows
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
-    return YES;
+    
+    if (indexPath.section == 1) return YES;
+    
+    else return NO;
 }
-*/
 
-/*
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
+        [self.addedSpaceObjects removeObjectAtIndex:indexPath.row];
+        NSMutableArray *newSavedSpaceObjectData = [[NSMutableArray alloc] init];
+        for (SpaceObject *spaceObject in self.addedSpaceObjects) {
+            [newSavedSpaceObjectData addObject:[self spaceObjectAsAPropertyList:spaceObject]];
+        }
+        [[NSUserDefaults standardUserDefaults] setObject:newSavedSpaceObjectData forKey:ADDED_SPACE_OBJECTS_KEY];
+        
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+    }
+    
+//   else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
 }
-*/
+
 
 /*
 // Override to support rearranging the table view.
