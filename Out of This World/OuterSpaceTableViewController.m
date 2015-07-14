@@ -36,6 +36,8 @@
     return _addedSpaceObjects;
 }
 
+#pragma mark - BoilerPlate Code
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -233,7 +235,8 @@
         }
         [[NSUserDefaults standardUserDefaults] setObject:newSavedSpaceObjectData forKey:ADDED_SPACE_OBJECTS_KEY];
         
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        if (newSavedSpaceObjectData.count == 0) [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
+        else [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     
 //   else if (editingStyle == UITableViewCellEditingStyleInsert) {
